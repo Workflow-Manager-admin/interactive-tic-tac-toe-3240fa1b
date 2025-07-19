@@ -4,6 +4,7 @@ import GameBoard from "./components/GameBoard";
 import GameStatus from "./components/GameStatus";
 import GameControls from "./components/GameControls";
 import ModeSelector from "./components/ModeSelector";
+import HelpPage from "./components/HelpPage";
 
 // PUBLIC_INTERFACE
 /**
@@ -19,6 +20,8 @@ function App() {
   const [gameActive, setGameActive] = useState(true);
   const [winner, setWinner] = useState(null);
   const [draw, setDraw] = useState(false);
+  // Help page navigation
+  const [showHelp, setShowHelp] = useState(false);
 
   // Colors: from env or fallback to given specs
   const primary = process.env.REACT_APP_PRIMARY_COLOR || "#1976d2";
@@ -139,34 +142,65 @@ function App() {
 
   return (
     <div className="App" style={themeVars}>
-      <main className="ttt-root">
-        <h1 className="ttt-title">Tic Tac Toe</h1>
-        {mode === "pick" ? (
-          <ModeSelector selectedMode={mode === "pick" ? undefined : mode} onSelectMode={handleModeSelect} />
-        ) : (
-          <>
-            <GameStatus status={status} />
-            <GameBoard
-              squares={squares}
-              onSquareClick={handleSquareClick}
-              disabled={!gameActive || (mode === "ai" && !isXNext)}
-            />
-            <GameControls onRestart={restartGame} />
-            <button
-              className="ttt-btn ttt-mode-btn"
-              style={{ marginTop: 10, fontSize: "1rem", opacity: 0.78 }}
-              onClick={() => setMode("pick")}
-            >
-              Change Mode
-            </button>
-          </>
-        )}
-        <footer className="ttt-footer">
-          <span>
-            Minimalistic Tic Tac Toe &copy; {new Date().getFullYear()}
-          </span>
-        </footer>
-      </main>
+      {showHelp ? (
+        <HelpPage onBack={() => setShowHelp(false)} />
+      ) : (
+        <>
+          <main className="ttt-root">
+            <h1 className="ttt-title">Tic Tac Toe</h1>
+            {mode === "pick" ? (
+              <ModeSelector selectedMode={mode === "pick" ? undefined : mode} onSelectMode={handleModeSelect} />
+            ) : (
+              <>
+                <GameStatus status={status} />
+                <GameBoard
+                  squares={squares}
+                  onSquareClick={handleSquareClick}
+                  disabled={!gameActive || (mode === "ai" && !isXNext)}
+                />
+                <GameControls onRestart={restartGame} />
+                <button
+                  className="ttt-btn ttt-mode-btn"
+                  style={{ marginTop: 10, fontSize: "1rem", opacity: 0.78 }}
+                  onClick={() => setMode("pick")}
+                >
+                  Change Mode
+                </button>
+              </>
+            )}
+            <footer className="ttt-footer">
+              <span>
+                Minimalistic Tic Tac Toe &copy; {new Date().getFullYear()}
+              </span>
+            </footer>
+          </main>
+          {/* Floating Help button (bottom right corner, always visible on main UI) */}
+          <button
+            className="ttt-btn"
+            style={{
+              position: "fixed",
+              right: 24,
+              bottom: 24,
+              minWidth: 74,
+              zIndex: 999,
+              opacity: 0.92,
+              background: "var(--ttt-primary)",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: "1.09em",
+              borderRadius: 12,
+              boxShadow: "0 2px 10px rgba(25, 118, 210, 0.08)",
+              letterSpacing: ".03em",
+              outline: "none",
+              border: "none",
+            }}
+            onClick={() => setShowHelp(true)}
+            aria-label="Show help"
+          >
+            Help
+          </button>
+        </>
+      )}
     </div>
   );
 }
