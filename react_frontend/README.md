@@ -29,6 +29,19 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 ## Customization
 
+### OpenAI API Key Integration
+
+This project can use the OpenAI API in the frontend by providing an environment variable `REACT_APP_OPENAI_API_KEY` in your `.env` file (located at the project root).
+
+- The key is accessible at runtime in code using `process.env.REACT_APP_OPENAI_API_KEY`.
+- See [`src/openaiService.js`](src/openaiService.js) for an example of how the key is loaded and how future OpenAI API calls can be implemented.
+- **Important:** In React (CRA), only env variables prefixed with `REACT_APP_` are included in the final build. Never expose private keys unintentionally.
+
+Example `.env` entry:
+```
+REACT_APP_OPENAI_API_KEY=sk-...yourkeyhere...
+```
+
 ### Colors
 
 The main brand colors are defined as CSS variables in `src/App.css`:
